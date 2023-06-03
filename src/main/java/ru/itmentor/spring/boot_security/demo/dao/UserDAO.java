@@ -1,21 +1,26 @@
 package ru.itmentor.spring.boot_security.demo.dao;
 
 
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Repository;
 import ru.itmentor.spring.boot_security.demo.model.User;
+import ru.itmentor.spring.boot_security.demo.repository.UserRepository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
-public interface UserDAO {
-    User getUser(int id);
+@Repository
+public interface UserDAO extends UserRepository {
+    User findById(int id);
 
-    void addUser(User user);
-
-    void updateUser(User user);
-
-    void deleteUser(User user);
-
+    @Query("SELECT DISTINCT u FROM User u LEFT JOIN FETCH u.roles")
     List<User> getAllUsers();
 
-    UserDetails getUserByName(String username);
+    @Query("SELECT DISTINCT u FROM User u LEFT JOIN FETCH u.roles WHERE u.id = :id")
+    User findByIdWithRoles(@Param("id") int id);
+
+    @Query("SELECT u FROM User u LEFT JOIN FETCH u.roles WHERE u.name = :username")
+    UserDetails getUserByUsername(@Param("username") String username);
 }

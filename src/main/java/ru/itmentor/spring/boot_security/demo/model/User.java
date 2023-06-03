@@ -4,7 +4,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.management.relation.Role;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.HashSet;
@@ -17,6 +16,9 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
     private int id;
+
+    @Column(unique = true, nullable = false)
+    private String username;
     @Column
     private String name;
     @Column
@@ -28,11 +30,12 @@ public class User implements UserDetails {
     @Column
     private String password;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<UserRole> roles;
     public User() {}
 
-    public User(String name, String surname, int age, boolean enabled, String password, Set<UserRole> roles) {
+    public User(String username, String name, String surname, int age, boolean enabled, String password, Set<UserRole> roles) {
+        this.username = username;
         this.name = name;
         this.surname = surname;
         this.age = age;
@@ -136,6 +139,10 @@ public class User implements UserDetails {
         for (UserRole role : roles) {
             role.setUser(this);
         }
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     @Override

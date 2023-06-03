@@ -1,49 +1,20 @@
 package ru.itmentor.spring.boot_security.demo.service;
 
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
-import ru.itmentor.spring.boot_security.demo.dao.UserDAO;
 import ru.itmentor.spring.boot_security.demo.model.User;
 
 import javax.transaction.Transactional;
 import java.util.List;
 
-@Service
-public class UserService {
-    private final UserDAO usersDAO;
+public interface UserService {
+    public List<User> getAllUsers();
 
-    @Autowired
-    public UserService(UserDAO usersDAO) {
-        this.usersDAO = usersDAO;
-    }
+    public User getUser(int id);
 
-    public List<User> getAllUsers() {
-        return usersDAO.getAllUsers();
-    }
+    public User getUserByUsername(String username);
 
-    public User getUser(int id) {
-        return usersDAO.getUser(id);
-    }
+    public void addUser(User user);
 
-    public User getUserByUsername(String username) {
-        return (User) usersDAO.getUserByName(username);
-    }
+    public void updateUser(User user);
 
-    @Transactional
-    public void addUser(User user) {
-        usersDAO.addUser(user);
-    }
-
-    @Transactional
-    public void updateUser(User user) {
-        usersDAO.updateUser(user);
-    }
-
-    @Transactional
-    public void deleteUser(int id) {
-        User user = usersDAO.getUser(id);
-        usersDAO.deleteUser(user);
-    }
+    public void deleteUser(int id);
 }
