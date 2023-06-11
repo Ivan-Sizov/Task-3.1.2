@@ -21,10 +21,13 @@ public class UserController {
 
     @GetMapping("")
     public String showUserInfo(Model model) {
+        return "/users/userDetails";
+    }
+
+    @ModelAttribute("loggedInUser")
+    public User getLoggedInUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        User user = userServiceImpl.getUserByUsername(username);
-        model.addAttribute("user", user);
-        return "users/userInfo";
+        return userServiceImpl.getUserByUsername(username);
     }
 }
