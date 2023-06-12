@@ -56,7 +56,7 @@ public class UserRole implements GrantedAuthority {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserRole userRole = (UserRole) o;
-        return Objects.equals(id, userRole.id) && Objects.equals(user, userRole.user) && Objects.equals(role, userRole.role);
+        return Objects.equals(id, userRole.id) && Objects.equals(role, userRole.role);
     }
 
     @Override

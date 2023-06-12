@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -26,19 +27,22 @@ public class User implements UserDetails {
     @Column
     private int age;
     @Column
-    private boolean enabled;
+    private String email;
+    @Column
+    private boolean enabled = true;
     @Column
     private String password;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval=true)
     private Set<UserRole> roles;
     public User() {}
 
-    public User(String username, String name, String surname, int age, boolean enabled, String password, Set<UserRole> roles) {
+    public User(String username, String name, String surname, int age, String email, boolean enabled, String password, Set<UserRole> roles) {
         this.username = username;
         this.name = name;
         this.surname = surname;
         this.age = age;
+        this.email = email;
         this.enabled = enabled;
         this.password = password;
         this.roles = roles;
@@ -108,7 +112,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.getName();
+        return this.username;
     }
 
     @Override
@@ -145,14 +149,42 @@ public class User implements UserDetails {
         this.username = username;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     @Override
     public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", age=" + age +
+        return "{" +
+                "\"id\":" + id +
+                ", \"username\":\"" + username + "\"" +
+                ", \"name\":\"" + name + "\"" +
+                ", \"surname\":\"" + surname + "\"" +
+                ", \"age\":" + age +
+                ", \"email\":\"" + email + "\"" +
+                ", \"password\":\"" + password + "\"" +
+                ", \"roles\":" + rolesToString(roles) +
                 '}';
+    }
+
+    private String rolesToString(Set<UserRole> roles) {
+        if (roles == null) {
+            return "[]";
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        for (UserRole role : roles) {
+            sb.append("\"").append(role.getRole()).append("\", ");
+        }
+        if (!roles.isEmpty()) {
+            sb.setLength(sb.length() - 2);
+        }
+        sb.append("]");
+        return sb.toString();
     }
 
     @Override
