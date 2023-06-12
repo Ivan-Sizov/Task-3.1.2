@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import ru.itmentor.spring.boot_security.demo.model.User;
+import ru.itmentor.spring.boot_security.demo.model.UserDTO;
 import ru.itmentor.spring.boot_security.demo.repository.UserRepository;
 
 import javax.transaction.Transactional;
