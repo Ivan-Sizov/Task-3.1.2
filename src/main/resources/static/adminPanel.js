@@ -1,6 +1,6 @@
 window.onload = populateAllUsersTable;
 
-function populateForm(user) {
+function populateEditForm(user) {
     const roles = user.roles.map(function (role) {
         return role.role.replace('ROLE_', '');
     });
@@ -16,14 +16,15 @@ function populateForm(user) {
     });
 }
 
-function submitForm(e) {
+function editUser(e) {
     e.preventDefault();
 
     const token = $("meta[name='_csrf']").attr("content");
     const header = $("meta[name='_csrf_header']").attr("content");
+    const id = $('#edit-id').val();
 
     const userJson = {
-        id: $('#edit-id').val(),
+        id: id,
         name: $('#edit-name').val(),
         surname: $('#edit-surname').val(),
         age: $('#edit-age').val(),
@@ -43,7 +44,8 @@ function submitForm(e) {
         },
         success: function () {
             $('#editUserModal').modal('hide');
-            location.reload();
+            deleteTableContents();
+            populateAllUsersTable();
         },
         error: function (error) {
             console.error("Error:", error);
@@ -66,7 +68,7 @@ function deleteUser(e) {
         },
         success: function () {
             $('#deleteUserModal').modal('hide');
-            location.reload();
+            deleteRow(id);
         },
         error: function (error) {
             console.error("Error:", error);
@@ -124,7 +126,7 @@ function populateAllUsersTable() {
                 editButton.setAttribute("data-toggle", "modal");
                 editButton.setAttribute("data-target", "#editUserModal");
                 editButton.onclick = function () {
-                    populateForm(user);
+                    populateEditForm(user);
                 };
                 editButtonTd.appendChild(editButton);
                 tr.appendChild(editButtonTd);
@@ -146,14 +148,19 @@ function populateAllUsersTable() {
         });
 }
 
-function updateRowData(id) {
-
-}
-
 function deleteRow(id) {
-
+    const tr = document.querySelector("#user-row-" + id);
+    if (tr) {
+        tr.remove();
+    }
 }
 
-function getUser(id) {
-
+function deleteTableContents() {
+    let tbody = document.querySelector("tbody");
+    if (tbody) {
+        tbody.remove();
+    }
+    tbody = document.createElement("tbody");
+    const table = document.querySelector("table");
+    table.appendChild(tbody);
 }
