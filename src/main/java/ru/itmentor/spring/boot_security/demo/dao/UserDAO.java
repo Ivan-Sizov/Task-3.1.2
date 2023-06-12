@@ -11,13 +11,14 @@ import ru.itmentor.spring.boot_security.demo.repository.UserRepository;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public interface UserDAO extends UserRepository {
     User findById(int id);
 
     @Query("SELECT u FROM User u LEFT JOIN FETCH u.roles")
-    List<User> getAllUsers();
+    Set<User> getAllUsers();
 
     @Query("SELECT u FROM User u LEFT JOIN FETCH u.roles WHERE u.id = :id")
     User findByIdWithRoles(@Param("id") int id);
