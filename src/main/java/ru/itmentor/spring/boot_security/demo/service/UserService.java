@@ -4,9 +4,10 @@ import ru.itmentor.spring.boot_security.demo.model.User;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Set;
 
 public interface UserService {
-    public List<User> getAllUsers();
+    public Set<User> getAllUsers();
 
     public User getUser(int id);
 

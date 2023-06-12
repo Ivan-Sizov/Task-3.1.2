@@ -10,6 +10,7 @@ import ru.itmentor.spring.boot_security.demo.model.User;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -22,7 +23,7 @@ public class UserServiceImpl implements UserService{
         this.passwordEncoder = passwordEncoder;
     }
 
-    public List<User> getAllUsers() {
+    public Set<User> getAllUsers() {
         return usersDAO.getAllUsers();
     }
 

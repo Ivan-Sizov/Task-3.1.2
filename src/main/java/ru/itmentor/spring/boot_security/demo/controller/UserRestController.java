@@ -27,7 +27,7 @@ public class UserRestController {
     }
 
     @GetMapping("")
-    public List<User> getAllUsers() {
+    public Set<User> getAllUsers() {
         return userService.getAllUsers();
     }
 
