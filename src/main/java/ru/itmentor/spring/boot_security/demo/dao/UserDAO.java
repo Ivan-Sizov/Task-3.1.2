@@ -16,10 +16,10 @@ import java.util.List;
 public interface UserDAO extends UserRepository {
     User findById(int id);
 
-    @Query("SELECT DISTINCT u FROM User u LEFT JOIN FETCH u.roles")
+    @Query("SELECT u FROM User u LEFT JOIN FETCH u.roles")
     List<User> getAllUsers();
 
-    @Query("SELECT DISTINCT u FROM User u LEFT JOIN FETCH u.roles WHERE u.id = :id")
+    @Query("SELECT u FROM User u LEFT JOIN FETCH u.roles WHERE u.id = :id")
     User findByIdWithRoles(@Param("id") int id);
 
     @Query("SELECT u FROM User u LEFT JOIN FETCH u.roles WHERE u.username = :username")
