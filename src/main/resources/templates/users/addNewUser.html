@@ -1,3 +1,39 @@
+<script th:inline="javascript">
+        function addNewUser(e) {
+        e.preventDefault();
+
+        const token = $("meta[name='_csrf']").attr("content");
+        const header = $("meta[name='_csrf_header']").attr("content");
+
+        const userJson = {
+            name: $('#name').val(),
+            surname: $('#surname').val(),
+            age: $('#age').val(),
+            email: $('#email').val(),
+            username: $('#username').val(),
+            password: $('#password').val(),
+            roles: $('#roles').val()
+        };
+
+        console.log(JSON.stringify(userJson));
+
+        $.ajax({
+            url: '/api/users/',
+            type: 'POST',
+            data: JSON.stringify(userJson),
+            contentType: "application/json",
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader(header, token);
+            },
+            success: function() {
+                window.location.href="/admin";
+            },
+            error: function(error) {
+                console.error("Error:", error);
+            }
+        });
+    }
+</script>
 <div th:replace="~{includes/head :: head('Admin panel', '/admin')}"></div>
 <ul class="nav nav-tabs">
     <li class="nav-item">
@@ -12,36 +48,36 @@
         <b>Add new user</b>
     </div>
     <div class="center mt-3">
-        <form class="width-33" th:action="@{/admin}" th:method="POST" th:object="${user}">
+        <form class="width-33" onsubmit="addNewUser(event)">
             <div class="form-group center">
-                <label class="bold mb-0" for="firstName">First name</label>
-                <input class="form-control" type="text" id="firstName" th:field="*{name}">
+                <label class="bold mb-0" for="name">First name</label>
+                <input class="form-control" type="text" id="name">
             </div>
             <div class="form-group center">
-                <label class="bold mb-0" for="lastName">Last name</label>
-                <input class="form-control" type="text" id="lastName" th:field="*{surname}">
+                <label class="bold mb-0" for="surname">Last name</label>
+                <input class="form-control" type="text" id="surname">
             </div>
             <div class="form-group center">
                 <label class="bold mb-0" for="username">Username</label>
-                <input class="form-control" type="text" id="username" th:field="*{username}">
+                <input class="form-control" type="text" id="username">
             </div>
             <div class="form-group center">
                 <label class="bold mb-0" for="age">Age</label>
-                <input class="form-control" type="text" id="age" th:field="*{age}">
+                <input class="form-control" type="text" id="age">
             </div>
             <div class="form-group center">
                 <label class="bold mb-0" for="email">Email</label>
-                <input class="form-control" type="text" id="email" th:field="*{email}">
+                <input class="form-control" type="text" id="email">
             </div>
             <div class="form-group center">
                 <label class="bold mb-0" for="password">Password</label>
-                <input class="form-control" type="password" id="password" th:field="*{password}">
+                <input class="form-control" type="password" id="password">
             </div>
             <div class="form-group center">
-                <label class="bold mb-0" for="role">Role</label>
-                <select class="form-control" name="role" id="role">
-                    <option value="ROLE_ADMIN">ADMIN</option>
-                    <option value="ROLE_USER" selected>USER</option>
+                <label class="bold mb-0" for="roles">Role</label>
+                <select class="form-control" name="roles" id="roles" multiple>
+                    <option value="ADMIN">ADMIN</option>
+                    <option value="USER" selected>USER</option>
                 </select>
             </div>
 
